@@ -6,18 +6,21 @@ import Checkout from './pages/Checkout';
 import ProductDetails from './pages/ProductDetails';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <ToastContainer />
-      <NavigationBar />
-      <Routes>
-        <Route path="/" element={<ProductPage />} />
-        <Route path="/order" element={<Order />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-      </Routes>
+    <div className="App">
+      <div className="min-h-screen bg-gray-100">
+        <ToastContainer />
+        <NavigationBar />
+        <Routes>
+          <Route path="/" element={<ProductPage />} />
+          <Route path="/order" element={<Order />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+        </Routes>
+      </div>
     </div>
   );
 }

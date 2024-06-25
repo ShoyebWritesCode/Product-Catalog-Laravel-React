@@ -1,58 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
+import axios from 'axios';
 
 const ProductPage = () => {
-  // Define product data directly within the component
-  const products = [
-    {
-      id: 1,
-      name: 'Product 1',
-      description: 'Description for Product 1',
-      price: 1150,
-      averageRating: 4.5,
-      categories: ['Category A', 'Category B'],
-      image: 'https://via.placeholder.com/150', // Placeholder image URL
-    },
-    {
-      id: 2,
-      name: 'Product 2',
-      description: 'Description for Product 2',
-      price: 600,
-      averageRating: 3.8,
-      categories: ['Category B', 'Category C'],
-      image: 'https://via.placeholder.com/150', // Placeholder image URL
-    },
-    {
-      id: 3,
-      name: 'Product 3',
-      description: 'Description for Product 3',
-      price: 350,
-      averageRating: 5.0,
-      categories: ['Category A', 'Category C'],
-      image: 'https://via.placeholder.com/150', // Placeholder image URL
-    },
-    {
-      id: 4,
-      name: 'Product 4',
-      description: 'Description for Product 3',
-      price: 825,
-      averageRating: 5.0,
-      categories: ['Category A', 'Category C'],
-      image: 'https://via.placeholder.com/150', // Placeholder image URL
-    },
-  ];
+  const [products, setProducts] = useState([]); // State to store fetched products
+  const [isLoading, setIsLoading] = useState(false); // State to indicate loading status
+  const [error, setError] = useState(null); // State to store any errors
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true); // Set loading state to true
+      setError(null); // Clear any previous errors
+
+      try {
+        const response = await axios.get('http://localhost:8000/api/products');
+        setProducts(response.data.products); // Update products state with fetched data
+        console.log('Products:', response.data.products);
+      } catch (error) {
+        setError(error); // Set error state if request fails
+        console.error('Error fetching products:', error);
+      } finally {
+        setIsLoading(false); // Set loading state to false regardless of success or failure
+      }
+    };
+
+    fetchData(); // Fetch data on component mount
+  }, []); // Empty dependency array to fetch data only once on mount
 
   return (
     <div className="bg-gray-100 py-8">
+           {' '}
       <div className="max-w-screen-xl mx-auto px-4">
-        <h1 className="text-3xl font-semibold text-gray-800 mb-4">Products</h1>
-
-        <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+               {' '}
+        <h1 className="text-3xl font-semibold text-gray-800 mb-4">Products</h1> 
+             {' '}
+        {isLoading && <p className="text-gray-600">Loading products...</p>}     
+          {error && <p className="text-red-500">Error: {error.message}</p>}     
+         {' '}
+        {!isLoading && !error && products.length === 0 && (
+          <p className="text-gray-600">No products found.</p>
+        )}
+               {' '}
+        {!isLoading && !error && products.length > 0 && (
+          <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
+                       {' '}
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+                     {' '}
+          </div>
+        )}
+             {' '}
       </div>
+         {' '}
     </div>
   );
 };
