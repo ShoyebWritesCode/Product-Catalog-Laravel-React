@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -44,6 +45,26 @@ const ProductDetails = () => {
     },
     // Add more products as needed
   ];
+
+  const [newReview, setNewReview] = useState({
+    username: '',
+    rating: 0,
+    comment: '',
+  });
+
+  const handleSubmitReview = (e) => {
+    e.preventDefault();
+
+    // Simulate submitting the review (replace with your backend logic)
+    console.log('New review submitted:', newReview);
+
+    // Reset the form after submission
+    setNewReview({ username: '', rating: 0, comment: '' });
+  };
+
+  const handleRatingChange = (event) => {
+    setNewReview({ ...newReview, rating: parseInt(event.target.value) });
+  };
 
   const product = products.find((p) => p.id === parseInt(id));
 
@@ -167,6 +188,62 @@ const ProductDetails = () => {
             </div>
           ))
         )}
+      </div>
+
+      <div className="bg-white rounded-xl shadow-md overflow-hidden mt-8 px-8 py-4">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">
+          Write a Review
+        </h3>
+        <form onSubmit={handleSubmitReview}>
+          <div className="mb-4">
+            <label
+              htmlFor="rating"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              Rating:
+            </label>
+            <div className="flex items-center">
+              {[1, 2, 3, 4, 5].map((ratingValue) => (
+                <label key={ratingValue} className="mr-3">
+                  <input
+                    type="radio"
+                    id={`rating-${ratingValue}`}
+                    name="rating"
+                    value={ratingValue}
+                    checked={newReview.rating === ratingValue}
+                    onChange={handleRatingChange}
+                    className="mr-1"
+                  />
+                  {ratingValue}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="comment"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              Comment:
+            </label>
+            <textarea
+              id="comment"
+              name="comment"
+              value={newReview.comment}
+              onChange={(e) =>
+                setNewReview({ ...newReview, comment: e.target.value })
+              }
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+              rows="4"
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            className="bg-gray-700 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
+          >
+            Submit Review
+          </button>
+        </form>
       </div>
     </div>
   );
